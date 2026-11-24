@@ -42,7 +42,39 @@ Tsumiru is a client for [Suwayomi-Server](https://github.com/Suwayomi/Suwayomi-S
 
 ## Download
 
-You need a running [Suwayomi-Server](https://github.com/Suwayomi/Suwayomi-Server) that your device can reach. The [download page](https://tsumiru.app/download/) has install steps for each platform.
+The standard client-only downloads need a running
+[Suwayomi-Server](https://github.com/Suwayomi/Suwayomi-Server) that your device
+can reach. Optional server-manager desktop downloads can start a local server.
+The [download page](https://tsumiru.app/download/) has install steps for each
+platform.
+
+### Desktop local-server manager
+
+Optional server-manager editions are available for Linux x64, Windows x64, and
+universal macOS. They let Tsumiru download a supported official Suwayomi-Server
+release when you explicitly choose to install it, then start/stop it, configure
+its port, network binding and data directory, check API readiness, and view
+process logs. The server and Java runtime are not included in the Tsumiru
+download. The ordinary client downloads remain client-only.
+
+On Linux, extract the `linux-x64-server-manager.tar.gz` archive and run
+`./tsumiru`. On Windows, extract `windows-x64-server-manager.zip` and run
+`tsumiru.exe`. On macOS, open
+`macos-universal-server-manager.zip`. The Linux archive is a native Flutter
+bundle and requires a compatible GTK 3 desktop runtime. The first server
+installation requires network access and substantial additional disk space.
+Tsumiru verifies the release checksum and keeps server versions separate; server
+updates are explicit and do not overwrite the server's data directory. The
+server stops when Tsumiru exits.
+
+Flatpak, AppImage, mobile and web builds do not include the local server manager.
+
+The local server binds to this computer only by default. Allowing LAN access is
+optional; the server's default authentication mode is unauthenticated, so do not
+enable network access on an untrusted network without configuring authentication.
+The local server's data directory is separate from other Suwayomi installations.
+The downloaded server includes its MPL-2.0 license and the Java runtime's
+license notices.
 
 ### Android
 

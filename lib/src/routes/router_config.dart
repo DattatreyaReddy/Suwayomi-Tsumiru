@@ -43,6 +43,7 @@ import '../features/offline/presentation/offline_settings_screen.dart';
 import '../features/onboarding/data/onboarding_complete.dart';
 import '../features/onboarding/presentation/onboarding_screen.dart';
 import '../features/quick_open/presentation/search_stack/search_stack_screen.dart';
+import '../features/server_manager/presentation/local_server_screen.dart';
 import '../features/settings/presentation/advanced/advanced_screen.dart';
 import '../features/settings/presentation/appearance/appearance_screen.dart';
 import '../features/settings/presentation/backup/backup_screen.dart';
@@ -127,6 +128,7 @@ abstract class Routes {
   static const generalSettings = 'general';
   static const backup = 'backup';
   static const serverSettings = 'server';
+  static const localServerManager = 'server-manager';
   static const serverNetwork = 'network';
   static const serverWebInterface = 'web-interface';
   static const serverOpds = 'opds';
@@ -267,6 +269,9 @@ GoRouter routerConfig(Ref ref) {
             TypedGoRoute<MoreRoute>(
               path: Routes.more,
               routes: [
+                TypedGoRoute<LocalServerManagerRoute>(
+                  path: Routes.localServerManager,
+                ),
                 TypedGoRoute<HistoryRoute>(path: Routes.history),
                 TypedShellRoute<SettingsWindowShellRoute>(
                   routes: [

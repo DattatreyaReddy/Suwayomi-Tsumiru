@@ -11,6 +11,20 @@ class MoreRoute extends GoRouteData with $MoreRoute {
       const NoTransitionPage(child: MoreScreen());
 }
 
+class LocalServerManagerRoute extends GoRouteData
+    with $LocalServerManagerRoute {
+  const LocalServerManagerRoute();
+
+  Widget get _screen => const LocalServerScreen();
+
+  @override
+  Widget build(context, state) => DetailNavigationShellScreen(child: _screen);
+
+  @override
+  Page<void> buildPage(BuildContext context, GoRouterState state) =>
+      detailNavigationPage(context, state, _screen);
+}
+
 // Keep settings in the desktop window beneath the global-shortcut shell.
 
 class AboutRoute extends GoRouteData with $AboutRoute {

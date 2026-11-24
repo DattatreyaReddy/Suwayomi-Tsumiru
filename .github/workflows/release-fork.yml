@@ -251,6 +251,15 @@ jobs:
           mv ./"${pkg_name}-${{ github.ref_name }}-linux-x86_64.AppImage.zsync" dist/
           rm -rf squashfs-root fastforge-input.AppImage
 
+      - name: Package opt-in local-server manager Linux archive
+        if: >-
+          matrix.target == 'linux' &&
+          (startsWith(github.ref, 'refs/tags/') || github.event_name == 'workflow_dispatch')
+        run: |
+          flutter build linux --release --dart-define=TSUMIRU_SERVER_MANAGER=true
+          tar -czf "dist/${pkg_name}-${{ github.ref_name }}-linux-x64-server-manager.tar.gz" \
+            -C build/linux/x64/release/bundle .
+
       - name: Package Web
         if: matrix.target == 'web'
         working-directory: build/web
@@ -301,6 +310,21 @@ jobs:
           done < <(find "$APP/Contents/Frameworks" -type f -print0)
           ditto -c -k --sequesterRsrc --keepParent "$APP" "dist/${pkg_name}-${{ github.ref_name }}-macos-universal.zip"
 
+      - name: Package opt-in local-server manager macOS archive
+        if: >-
+          matrix.target == 'macos' &&
+          (startsWith(github.ref, 'refs/tags/') || github.event_name == 'workflow_dispatch')
+        shell: bash
+        run: |
+          flutter build macos --release --dart-define=TSUMIRU_SERVER_MANAGER=true
+          APP=$(find build/macos/Build/Products/Release -maxdepth 1 -name "*.app" | head -1)
+          if [ -z "$APP" ]; then
+            echo "::error::macOS local-server manager app bundle missing"
+            exit 1
+          fi
+          ditto -c -k --sequesterRsrc --keepParent "$APP" \
+            "dist/${pkg_name}-${{ github.ref_name }}-macos-universal-server-manager.zip"
+
       - name: Package iOS (unsigned IPA)
         if: matrix.target == 'ios'
         # An .ipa is just a zip with the .app inside a top-level Payload/ dir.
@@ -332,6 +356,24 @@ jobs:
           }
           Write-Host "Bundled SQLite: $($sqlite.Name)"
           Compress-Archive -Path build\windows\x64\runner\Release\* -DestinationPath "dist\${env:pkg_name}-${{ github.ref_name }}-windows-x64.zip"
+
+      - name: Package opt-in local-server manager Windows archive
+        if: >-
+          matrix.target == 'windows' &&
+          (startsWith(github.ref, 'refs/tags/') || github.event_name == 'workflow_dispatch')
+        shell: pwsh
+        run: |
+          flutter build windows --release --dart-define=TSUMIRU_SERVER_MANAGER=true
+          $release = Join-Path $env:GITHUB_WORKSPACE 'build/windows/x64/runner/Release'
+          $redist = vswhere -latest -find 'VC\Redist\MSVC\*\x64\*\*.dll'
+          Copy-Item $redist $release -Force
+          $sqlite = Get-ChildItem $release -Filter *.dll |
+            Where-Object { $_.Name -match 'sqlite3' }
+          if (-not $sqlite) {
+            throw "sqlite3 native library missing from the Windows server-manager build"
+          }
+          Compress-Archive -Path (Join-Path $release '*') `
+            -DestinationPath "dist/${env:pkg_name}-${{ github.ref_name }}-windows-x64-server-manager.zip"
 
       - name: Attach to the draft release
         if: startsWith(github.ref, 'refs/tags/')

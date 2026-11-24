@@ -8,6 +8,7 @@ import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:material_ui/material_ui.dart';
 
+import '../../../../constants/app_distribution.dart';
 import '../../../../routes/router_config.dart';
 import '../../../../utils/extensions/custom_extensions.dart';
 import '../../../../utils/platform/is_android_native.dart';
@@ -140,6 +141,14 @@ class SettingsScreen extends ConsumerWidget {
                       title: context.l10n.server,
                       onTap: () => const ServerSettingsRoute().push(context),
                     ),
+                    if (isServerManagerBuild && isDesktopPlatform)
+                      SettingsGroupRow(
+                        icon: FluentIcons.server_24_regular,
+                        title: context.l10n.localServerManager,
+                        subtitle: context.l10n.localServerDescription,
+                        onTap: () =>
+                            const LocalServerManagerRoute().push(context),
+                      ),
                   ],
                 ),
                 const SizedBox(height: 24),

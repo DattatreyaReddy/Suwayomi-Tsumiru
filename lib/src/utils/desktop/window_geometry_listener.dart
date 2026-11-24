@@ -6,11 +6,18 @@
 
 import 'dart:async';
 
+import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:window_manager/window_manager.dart';
 
 import 'window_geometry.dart';
 import 'window_geometry_store.dart';
+
+Future<void> Function()? _beforeDesktopWindowClose;
+
+void setBeforeDesktopWindowClose(Future<void> Function() callback) {
+  _beforeDesktopWindowClose = callback;
+}
 
 /// Debounce resize saves: Linux emits continuous onWindowResize, never onWindowResized.
 class WindowGeometryListener with WindowListener {
@@ -70,8 +77,16 @@ class WindowGeometryListener with WindowListener {
     _closing = true;
     _debounce?.cancel();
     try {
+      await _beforeDesktopWindowClose?.call();
+    } catch (exception, stackTrace) {
+      debugPrint('Failed to stop local server before closing: $exception');
+      debugPrintStack(stackTrace: stackTrace);
+    }
+    try {
       await _flush().timeout(const Duration(seconds: 2));
-    } catch (_) {
+    } catch (exception, stackTrace) {
+      debugPrint('Failed to persist window geometry on close: $exception');
+      debugPrintStack(stackTrace: stackTrace);
     } finally {
       await windowManager.destroy();
     }
@@ -82,8 +97,7 @@ class WindowGeometryListener with WindowListener {
     if (running != null) {
       try {
         await running;
-      } catch (_) {
-      }
+      } catch (_) {}
     }
     await _persistNow();
   }

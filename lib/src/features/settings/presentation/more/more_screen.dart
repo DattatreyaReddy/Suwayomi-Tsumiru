@@ -8,6 +8,7 @@ import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:material_ui/material_ui.dart';
 
+import '../../../../constants/app_distribution.dart';
 import '../../../../constants/enum.dart';
 import '../../../../constants/urls.dart';
 import '../../../../global_providers/global_providers.dart';
@@ -15,6 +16,7 @@ import '../../../../routes/router_config.dart';
 import '../../../../utils/extensions/custom_extensions.dart';
 import '../../../../utils/launch_url_in_web.dart';
 import '../../../../utils/misc/toast/toast.dart';
+import '../../../../utils/platform/platform_runtime.dart';
 import '../../../../widgets/compact_switch.dart';
 import '../../../../widgets/desktop/desktop_top_bar.dart';
 import '../../../../widgets/tsumiru_logo.dart';
@@ -166,19 +168,25 @@ class MoreScreen extends ConsumerWidget {
                     SettingsGroupRow(
                       icon: FluentIcons.tag_24_regular,
                       title: context.l10n.categories,
-                      trailing: const Icon(FluentIcons.chevron_right_24_regular),
+                      trailing: const Icon(
+                        FluentIcons.chevron_right_24_regular,
+                      ),
                       onTap: () => const EditCategoriesRoute().push(context),
                     ),
                     SettingsGroupRow(
                       icon: FluentIcons.history_24_regular,
                       title: context.l10n.history,
-                      trailing: const Icon(FluentIcons.chevron_right_24_regular),
+                      trailing: const Icon(
+                        FluentIcons.chevron_right_24_regular,
+                      ),
                       onTap: () => const HistoryRoute().push(context),
                     ),
                     SettingsGroupRow(
                       icon: FluentIcons.arrow_counterclockwise_24_regular,
                       title: context.l10n.backup,
-                      trailing: const Icon(FluentIcons.chevron_right_24_regular),
+                      trailing: const Icon(
+                        FluentIcons.chevron_right_24_regular,
+                      ),
                       onTap: () => const BackupRoute().push(context),
                     ),
                   ],
@@ -186,17 +194,32 @@ class MoreScreen extends ConsumerWidget {
                 const SizedBox(height: 16),
                 SettingsGroupCard(
                   children: [
+                    if (isServerManagerBuild && isDesktopPlatform)
+                      SettingsGroupRow(
+                        icon: FluentIcons.server_24_regular,
+                        title: context.l10n.localServerManager,
+                        subtitle: context.l10n.localServerDescription,
+                        trailing: const Icon(
+                          FluentIcons.chevron_right_24_regular,
+                        ),
+                        onTap: () =>
+                            const LocalServerManagerRoute().push(context),
+                      ),
                     SettingsGroupRow(
                       icon: FluentIcons.color_24_regular,
                       title: context.l10n.appearance,
-                      trailing: const Icon(FluentIcons.chevron_right_24_regular),
+                      trailing: const Icon(
+                        FluentIcons.chevron_right_24_regular,
+                      ),
                       onTap: () =>
                           const AppearanceSettingsRoute().push(context),
                     ),
                     SettingsGroupRow(
                       icon: FluentIcons.settings_24_regular,
                       title: context.l10n.settings,
-                      trailing: const Icon(FluentIcons.chevron_right_24_regular),
+                      trailing: const Icon(
+                        FluentIcons.chevron_right_24_regular,
+                      ),
                       onTap: () => const SettingsRoute().push(context),
                     ),
                   ],
@@ -207,13 +230,17 @@ class MoreScreen extends ConsumerWidget {
                     SettingsGroupRow(
                       icon: FluentIcons.info_24_regular,
                       title: context.l10n.about,
-                      trailing: const Icon(FluentIcons.chevron_right_24_regular),
+                      trailing: const Icon(
+                        FluentIcons.chevron_right_24_regular,
+                      ),
                       onTap: () => const AboutRoute().push(context),
                     ),
                     SettingsGroupRow(
                       icon: FluentIcons.question_circle_24_regular,
                       title: context.l10n.help,
-                      trailing: const Icon(FluentIcons.chevron_right_24_regular),
+                      trailing: const Icon(
+                        FluentIcons.chevron_right_24_regular,
+                      ),
                       onTap: () => launchUrlInWeb(
                         context,
                         AppUrls.tachideskHelp.url,

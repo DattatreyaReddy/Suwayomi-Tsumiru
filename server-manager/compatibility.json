@@ -1,0 +1,28 @@
+{
+  "schemaVersion": 1,
+  "latestTestedVersion": "v2.4.2373",
+  "maxSupportedVersion": "v2.4.2373",
+  "releases": [
+    {
+      "version": "v2.4.2373",
+      "assets": {
+        "linux-x64": {
+          "url": "https://github.com/Suwayomi/Suwayomi-Server/releases/download/v2.4.2373/Suwayomi-Server-v2.4.2373-linux-x64.tar.gz",
+          "sha256": "29de723470f2e89dc1f0730e7eeb69c6a048a83217b1b2fd8451441d267e2ec2"
+        },
+        "windows-x64": {
+          "url": "https://github.com/Suwayomi/Suwayomi-Server/releases/download/v2.4.2373/Suwayomi-Server-v2.4.2373-windows-x64.zip",
+          "sha256": "a8f1c7cf45ca3666afc2e8a06c7f4a968e07cee7d668e8be7cf194273a672a15"
+        },
+        "macos-x64": {
+          "url": "https://github.com/Suwayomi/Suwayomi-Server/releases/download/v2.4.2373/Suwayomi-Server-v2.4.2373-macOS-x64.tar.gz",
+          "sha256": "c83a4388bcb55a7ebd79d075803c1eba6dc8ebea70e52a3cf88d70b2780fdce4"
+        },
+        "macos-arm64": {
+          "url": "https://github.com/Suwayomi/Suwayomi-Server/releases/download/v2.4.2373/Suwayomi-Server-v2.4.2373-macOS-arm64.tar.gz",
+          "sha256": "5834598a6bba5e385b70a34ffb987ee2dda485ae20c28326ff9d38671e32d964"
+        }
+      }
+    }
+  ]
+}

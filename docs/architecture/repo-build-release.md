@@ -28,7 +28,7 @@ A release is **maintainer-initiated as a draft, then auto-published once every p
 1. `gh release create vX.Y.Z --target <sha> --notes-file notes.md --draft` — create the draft with its notes.
 2. `git tag vX.Y.Z <sha> && git push origin vX.Y.Z` — the tag push fires two workflows in parallel.
 
-**`release-fork.yml`** (primary release builder) — Flutter read from `.fvmrc` (currently 3.44.6). A **6-job** build matrix (`fail-fast: false`):
+**`release-fork.yml`** (primary release builder) — Flutter read from `.fvmrc` (currently 3.47.9). A **6-job** build matrix (`fail-fast: false`):
 
 | Job | Runner | Output |
 |---|---|---|
@@ -38,6 +38,19 @@ A release is **maintainer-initiated as a draft, then auto-published once every p
 | macos | macos-latest | `.app` zip |
 | ios | macos-latest | **unsigned** `.ipa` (no Apple Developer account; users re-sign via AltStore / SideStore / TrollStore) |
 | windows | **windows-2022** (pinned, not `latest`) | `*-windows-x64.zip` |
+| opt-in server manager | same desktop runners | Additional manager-only packages; Linux x64 tar.gz, Windows x64 zip, universal macOS zip |
+
+The desktop release jobs also build an opt-in `TSUMIRU_SERVER_MANAGER` variant
+for tagged releases and manual runs. These packages contain the manager UI but
+not Suwayomi-Server or Java. On explicit user action, Tsumiru reads
+`server-manager/compatibility.json` from the Tsumiru repository, downloads the
+selected official release asset, verifies its SHA-256 checksum, and installs it
+outside the app directory. Maintainers can change the latest tested version,
+supported ceiling, and release list in that manifest without rebuilding
+Tsumiru; each added asset needs its exact SHA-256 from the upstream release.
+The Linux manager edition is a standalone Flutter release archive
+(not the AppImage/Flatpak); macOS manager edition is a universal app. Ordinary,
+mobile, web, AppImage and Flatpak builds do not compile in the server manager.
 
 - Each platform attaches its artifact to the **draft** release (guarded by `startsWith(github.ref, 'refs/tags/')`). A separate **`publish`** job flips the draft to published (`--latest`) only after all six builds succeed — and refuses to publish if the release notes are empty, so an incomplete or blank release never goes public. A failed platform leaves the release a draft. On publish it best-effort triggers a `tsumiru.app` rebuild so the new release shows immediately.
 - **Weekly dry run:** a Monday 06:00 UTC cron builds all platforms with no tag ref — it catches iOS/macOS breakage before release day (the PR check builds only a single platform) and, without a tag, skips the attach + publish steps entirely.

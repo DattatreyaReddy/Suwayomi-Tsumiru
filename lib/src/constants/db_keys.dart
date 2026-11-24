@@ -16,6 +16,10 @@ enum DBKeys {
   serverLanUrl(null),
   serverPort(4567),
   serverPortToggle(true),
+  localServerPort(4567),
+  localServerBindToLan(false),
+  localServerDataDirectory(''),
+  localServerVersion(''),
   onboardingComplete(false),
   sourceLanguageFilter(["all", "lastUsed", "en", "localsourcelang"]),
   // Source ids in descending migration priority.
